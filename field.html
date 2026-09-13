@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FieldDirect — Farm to Consumer</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f8f1;
+      color: #183b24;
+    }
+
+    header {
+      background: #176b3a;
+      color: white;
+      padding: 18px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #a9e36d;
+    }
+
+    nav button {
+      border: none;
+      background: transparent;
+      color: white;
+      margin-left: 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .hero {
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 50px 20px;
+      background: linear-gradient(135deg, #e6f5dc, #ffffff);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #16803d;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: auto;
+      font-size: 18px;
+      color: #52705a;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 13px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .primary {
+      background: #16803d;
+      color: white;
+    }
+
+    .secondary {
+      background: white;
+      color: #16803d;
+      border: 2px solid #16803d;
+    }
+
+    section {
+      padding: 55px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 35px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.07);
+    }
+
+    .card h3 {
+      margin: 12px 0;
+    }
+
+    .icon {
+      font-size: 38px;
+    }
+
+    .dashboard {
+      display: none;
+    }
+
+    .dashboard.active {
+      display: block;
+    }
+
+    .form-box {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccd8ce;
+      border-radius: 7px;
+    }
+
+    label {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .crop-card {
+      overflow: hidden;
+    }
+
+    .crop-image {
+      height: 150px;
+      background: #dff1d5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 70px;
+      border-radius: 10px;
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: bold;
+      color: #16803d;
+      margin: 10px 0;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e5f6e8;
+      color: #16803d;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat h2 {
+      color: #16803d;
+      font-size: 30px;
+    }
+
+    .tracking {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .circle {
+      width: 35px;
+      height: 35px;
+      background: #16803d;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+
+    footer {
+      background: #123b24;
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+
+    @media(max-width:700px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      header {
+        padding: 15px;
+      }
+
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🌿 Field<span>Direct</span></div>
+
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('marketplace')">Marketplace</button>
+    <button onclick="showPage('farmer')">Farmer</button>
+    <button onclick="showPage('orders')">Orders</button>
+  </nav>
+</header>
+
+
+<!-- HOME -->
+
+<div id="home" class="page">
+
+  <div class="hero">
+    <div>
+      <h1>Fresh From <span>Farmers</span><br>Direct To You</h1>
+
+      <p>
+        FieldDirect connects farmers directly with consumers,
+        reducing unnecessary intermediaries and creating a
+        transparent, efficient supply chain.
+      </p>
+
+      <div class="buttons">
+        <button class="btn primary" onclick="showPage('marketplace')">
+          🛒 Shop Fresh Produce
+        </button>
+
+        <button class="btn secondary" onclick="showPage('farmer')">
+          👨‍🌾 Sell Your Crops
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <section>
+
+    <h2 class="section-title">How FieldDirect Works</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">👨‍🌾</div>
+        <h3>1. Farmer Lists</h3>
+        <p>
+          Farmers add crop name, quantity, price,
+          harvest date and packing details.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🔎</div>
+        <h3>2. Consumer Browses</h3>
+        <p>
+          Consumers view fresh produce directly
+          from nearby farmers.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🛒</div>
+        <h3>3. Place Order</h3>
+        <p>
+          Consumers select the required quantity
+          and place an order.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🚚</div>
+        <h3>4. Direct Delivery</h3>
+        <p>
+          Produce is packed and delivered directly
+          to the consumer.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- FARMER DASHBOARD -->
+
+<div id="farmer" class="page dashboard">
+
+  <section>
+
+    <h2 class="section-title">👨‍🌾 Farmer Dashboard</h2>
+
+    <div class="stats">
+
+      <div class="stat">
+        <h2 id="cropCount">3</h2>
+        <p>Active Listings</p>
+      </div>
+
+      <div class="stat">
+        <h2>₹18,500</h2>
+        <p>Total Earnings</p>
+      </div>
+
+      <div class="stat">
+        <h2>24</h2>
+        <p>Orders</p>
+      </div>
+
+    </div>
+
+
+    <div class="form-box">
+
+      <h2>Add New Crop</h2>
+      <br>
+
+      <label>Crop Name</label>
+      <input id="cropName" type="text" placeholder="Example: Tomato">
+
+      <label>Quantity (kg)</label>
+      <input id="quantity" type="number" placeholder="Example: 500">
+
+      <label>Price (₹/kg)</label>
+      <input id="cropPrice" type="number" placeholder="Example: 25">
+
+      <label>Harvest Date</label>
+      <input id="harvestDate" type="date">
+
+      <label>Packing Details</label>
+      <input id="packing" type="text" placeholder="Example: 10 kg boxes">
+
+      <button class="btn primary" onclick="addCrop()">
+        🌱 Publish Crop
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- MARKETPLACE -->
+
+<div id="marketplace" class="page dashboard">
+
+  <section>
+
+    <h2 class="section-title">🛒 Fresh Produce Marketplace</h2>
+
+    <div id="cropContainer" class="cards">
+
+      <!-- Crops generated using JavaScript -->
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- ORDERS -->
+
+<div id="orders" class="page dashboard">
+
+  <section>
+
+    <h2 class="section-title">📦 Order Tracking</h2>
+
+    <div class="tracking">
+
+      <h2>Order #FD1025</h2>
+      <p style="margin-top:10px;">
+        Fresh Tomatoes — 50 kg
+      </p>
+
+      <br>
+
+      <div class="step">
+        <div class="circle">✓</div>
+        <div>
+          <b>Order Placed</b>
+          <p>Consumer placed the order</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="circle">✓</div>
+        <div>
+          <b>Farmer Confirmed</b>
+          <p>Farmer accepted the order</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="circle">✓</div>
+        <div>
+          <b>Produce Packed</b>
+          <p>Fresh produce is ready</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="circle">🚚</div>
+        <div>
+          <b>Pickup / Delivery</b>
+          <p>Produce is on the way</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="circle">✓</div>
+        <div>
+          <b>Delivered</b>
+          <p>Consumer received the produce</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<!-- ============================= -->
+<!-- LOGIN / REGISTER SYSTEM -->
+<!-- ============================= -->
+
+
+
+  
+
+</footer>
+
+
+<!-- ========================= -->
+<!-- FIELD DIRECT AUTH PAGE -->
+<!-- ========================= -->
+
+<div id="auth" class="page" style="display:none;">
+
+  <section style="min-height:80vh;">
+
+    <div class="form-box">
+
+      <div style="text-align:center; margin-bottom:25px;">
+        <div style="font-size:50px;">🌿</div>
+
+        <h2>Welcome to FieldDirect</h2>
+
+        <p id="authMessage" style="margin-top:8px;color:#65776a;">
+          Choose how you want to continue
+        </p>
+      </div>
+
+
+      <!-- ROLE SELECTION -->
+
+      <div id="roleSelection">
+
+        <button
+          class="btn primary"
+          style="width:100%;"
+          onclick="selectRole('farmer')">
+
+          👨‍🌾 Continue as Farmer
+
+        </button>
+
+
+        <button
+          class="btn secondary"
+          style="width:100%;"
+          onclick="selectRole('consumer')">
+
+          🛒 Continue as Consumer
+
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN -->
+
+      <div id="loginBox" style="display:none;">
+
+        <h3 id="loginTitle">Login</h3>
+
+        <br>
+
+        <label>Email</label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="Enter your email"
+        >
+
+        <label>Password</label>
+
+        <input
+          id="loginPassword"
+          type="password"
+          placeholder="Enter your password"
+        >
+
+        <button
+          class="btn primary"
+          style="width:100%;"
+          onclick="loginUser()">
+
+          🔐 Login
+
+        </button>
+
+
+        <p style="text-align:center;margin-top:18px;">
+
+          Don't have an account?
+
+          <button
+            onclick="showRegister()"
+            style="
+              border:none;
+              background:none;
+              color:#16803d;
+              font-weight:bold;
+              cursor:pointer;
+            ">
+
+            Register
+
+          </button>
+
+        </p>
+
+
+        <button
+          onclick="backToRoles()"
+          style="
+            display:block;
+            margin:15px auto 0;
+            border:none;
+            background:none;
+            cursor:pointer;
+          ">
+
+          ← Back
+
+        </button>
+
+      </div>
+
+
+      <!-- REGISTER -->
+
+      <div id="registerBox" style="display:none;">
+
+        <h3 id="registerTitle">
+          Create Account
+        </h3>
+
+        <br>
+
+        <label>Full Name</label>
+
+        <input
+          id="registerName"
+          type="text"
+          placeholder="Enter your full name"
+        >
+
+
+        <label>Email</label>
+
+        <input
+          id="registerEmail"
+          type="email"
+          placeholder="Enter your email"
+        >
+
+
+        <label>Mobile Number</label>
+
+        <input
+          id="registerPhone"
+          type="tel"
+          placeholder="Enter mobile number"
+        >
+
+
+        <label>Password</label>
+
+        <input
+          id="registerPassword"
+          type="password"
+          placeholder="Create password"
+        >
+
+
+        <!-- CONSUMER ADDRESS -->
+
+        <div id="addressBox" style="display:none;">
+
+          <hr style="margin:20px 0;">
+
+          <h3>📍 Delivery Address</h3>
+
+          <p style="
+            font-size:13px;
+            color:#65776a;
+            margin:8px 0 15px;
+          ">
+            This address will be used for your deliveries.
+          </p>
+
+
+          <label>House / Flat Number</label>
+
+          <input
+            id="house"
+            type="text"
+            placeholder="Example: 12-45"
+          >
+
+
+          <label>Street / Area</label>
+
+          <input
+            id="street"
+            type="text"
+            placeholder="Example: Main Road"
+          >
+
+
+          <label>City</label>
+
+          <input
+            id="city"
+            type="text"
+            placeholder="Example: Hyderabad"
+          >
+
+
+          <label>State</label>
+
+          <select id="state">
+
+            <option value="">
+              Select State
+            </option>
+
+            <option>Telangana</option>
+            <option>Andhra Pradesh</option>
+            <option>Karnataka</option>
+            <option>Tamil Nadu</option>
+            <option>Kerala</option>
+            <option>Maharashtra</option>
+            <option>Other</option>
+
+          </select>
+
+
+          <label>Pincode</label>
+
+          <input
+            id="pincode"
+            type="text"
+            maxlength="6"
+            placeholder="6-digit pincode"
+          >
+
+        </div>
+
+
+        <button
+          class="btn primary"
+          style="width:100%;"
+          onclick="registerUser()">
+
+          🌱 Create Account
+
+        </button>
+
+
+        <p style="text-align:center;margin-top:18px;">
+
+          Already have an account?
+
+          <button
+            onclick="showLogin()"
+            style="
+              border:none;
+              background:none;
+              color:#16803d;
+              font-weight:bold;
+              cursor:pointer;
+            ">
+
+            Login
+
+          </button>
+
+        </p>
+
+
+        <button
+          onclick="backToRoles()"
+          style="
+            display:block;
+            margin:15px auto 0;
+            border:none;
+            background:none;
+            cursor:pointer;
+          ">
+
+          ← Back
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+
+    // ========================================
+// FIELD DIRECT AUTHENTICATION
+// ========================================
+
+let selectedRole = "";
+
+
+// ----------------------------------------
+// SELECT FARMER / CONSUMER
+// ----------------------------------------
+
+function selectRole(role) {
+
+    selectedRole = role;
+
+    // Hide role selection
+    document.getElementById("roleSelection").style.display = "none";
+
+    // Show login
+    document.getElementById("loginBox").style.display = "block";
+
+    // Hide register
+    document.getElementById("registerBox").style.display = "none";
+
+
+    if (role === "farmer") {
+
+        document.getElementById("loginTitle").innerText =
+            "👨‍🌾 Farmer Login";
+
+        document.getElementById("authMessage").innerText =
+            "Login to manage your crops and orders";
+
+    }
+
+    else if (role === "consumer") {
+
+        document.getElementById("loginTitle").innerText =
+            "🛒 Consumer Login";
+
+        document.getElementById("authMessage").innerText =
+            "Login to browse and purchase fresh produce";
+
+    }
+
+}
+
+
+// ----------------------------------------
+// REGISTER
+// ----------------------------------------
+
+function showRegister() {
+
+    document.getElementById("loginBox").style.display = "none";
+
+    document.getElementById("registerBox").style.display = "block";
+
+
+    if (selectedRole === "farmer") {
+
+        document.getElementById("registerTitle").innerText =
+            "👨‍🌾 Create Farmer Account";
+
+        document.getElementById("addressBox").style.display =
+            "none";
+
+    }
+
+    else {
+
+        document.getElementById("registerTitle").innerText =
+            "🛒 Create Consumer Account";
+
+        document.getElementById("addressBox").style.display =
+            "block";
+
+    }
+
+}
+
+
+// ----------------------------------------
+// BACK TO LOGIN
+// ----------------------------------------
+
+function showLogin() {
+
+    document.getElementById("registerBox").style.display =
+        "none";
+
+    document.getElementById("loginBox").style.display =
+        "block";
+
+}
+
+
+// ----------------------------------------
+// BACK TO ROLE SELECTION
+// ----------------------------------------
+
+function backToRoles() {
+
+    selectedRole = "";
+
+    document.getElementById("roleSelection").style.display =
+        "block";
+
+    document.getElementById("loginBox").style.display =
+        "none";
+
+    document.getElementById("registerBox").style.display =
+        "none";
+
+    document.getElementById("authMessage").innerText =
+        "Choose how you want to continue";
+
+}
+
+
+// ----------------------------------------
+// LOGIN
+// ----------------------------------------
+
+function loginUser() {
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+
+    if (!email || !password) {
+
+        alert("⚠️ Please enter email and password.");
+
+        return;
+
+    }
+
+
+    // Demo login
+    // Later we connect this to Node.js backend.
+
+    if (selectedRole === "farmer") {
+
+        alert("✅ Farmer login successful!");
+
+        showPage("farmer");
+
+    }
+
+    else if (selectedRole === "consumer") {
+
+        alert("✅ Consumer login successful!");
+
+        showPage("marketplace");
+
+    }
+
+}
+
+
+// ----------------------------------------
+// REGISTER USER
+// ----------------------------------------
+
+function registerUser() {
+
+    const name =
+        document.getElementById("registerName").value.trim();
+
+    const email =
+        document.getElementById("registerEmail").value.trim();
+
+    const phone =
+        document.getElementById("registerPhone").value.trim();
+
+    const password =
+        document.getElementById("registerPassword").value;
+
+
+    if (!name || !email || !phone || !password) {
+
+        alert("⚠️ Please fill all required fields.");
+
+        return;
+
+    }
+
+
+    // Consumer address
+
+    let address = null;
+
+
+    if (selectedRole === "consumer") {
+
+        const house =
+            document.getElementById("house").value.trim();
+
+        const street =
+            document.getElementById("street").value.trim();
+
+        const city =
+            document.getElementById("city").value.trim();
+
+        const state =
+            document.getElementById("state").value;
+
+        const pincode =
+            document.getElementById("pincode").value.trim();
+
+
+        if (
+            !house ||
+            !street ||
+            !city ||
+            !state ||
+            !pincode
+        ) {
+
+            alert(
+                "⚠️ Please enter your complete delivery address."
+            );
+
+            return;
+
+        }
+
+
+        address = {
+
+            house: house,
+
+            street: street,
+
+            city: city,
+
+            state: state,
+
+            pincode: pincode
+
+        };
+
+    }
+
+
+    const user = {
+
+        name: name,
+
+        email: email,
+
+        phone: phone,
+
+        password: password,
+
+        role: selectedRole,
+
+        address: address
+
+    };
+
+
+    // Save demo user
+
+    localStorage.setItem(
+        "fieldDirectUser",
+        JSON.stringify(user)
+    );
+
+
+    alert(
+        "🎉 Account created successfully!"
+    );
+
+
+    // Go to correct dashboard
+
+    if (selectedRole === "farmer") {
+
+        showPage("farmer");
+
+    }
+
+    else {
+
+        showPage("marketplace");
+
+    }
+
+}
+
+  // Initial crop data
+
+  let crops = [
+
+    {
+      name: "Tomatoes",
+      quantity: 500,
+      price: 25,
+      farmer: "Ramesh",
+      emoji: "🍅"
+    },
+
+    {
+      name: "Potatoes",
+      quantity: 800,
+      price: 22,
+      farmer: "Suresh",
+      emoji: "🥔"
+    },
+
+    {
+      name: "Carrots",
+      quantity: 350,
+      price: 30,
+      farmer: "Lakshmi",
+      emoji: "🥕"
+    }
+
+  ];
+
+
+  // Change pages
+
+  function showPage(page) {
+
+    document.querySelectorAll(".page").forEach(function(section) {
+
+      section.style.display = "none";
+
+    });
+
+    document.getElementById(page).style.display = "block";
+
+    if(page === "marketplace") {
+
+      displayCrops();
+
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+
+
+  // Display marketplace crops
+
+  function displayCrops() {
+
+    const container =
+      document.getElementById("cropContainer");
+
+    container.innerHTML = "";
+
+    crops.forEach(function(crop, index) {
+
+      container.innerHTML += `
+
+        <div class="card crop-card">
+
+          <div class="crop-image">
+            ${crop.emoji}
+          </div>
+
+          <span class="tag">
+            Direct from Farmer
+          </span>
+
+          <h3>${crop.name}</h3>
+
+          <p>
+            👨‍🌾 Farmer: ${crop.farmer}
+          </p>
+
+          <p>
+            📦 Available: ${crop.quantity} kg
+          </p>
+
+          <p class="price">
+            ₹${crop.price}/kg
+          </p>
+
+          <p style="color:#65776a;">
+            Transparent farmer price
+          </p>
+
+          <br>
+
+          <button
+            class="btn primary"
+            onclick="buyCrop(${index})">
+
+            🛒 Buy Now
+
+          </button>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+
+  // Add crop
+
+  function addCrop() {
+
+    const name =
+      document.getElementById("cropName").value;
+
+    const quantity =
+      document.getElementById("quantity").value;
+
+    const price =
+      document.getElementById("cropPrice").value;
+
+    const harvest =
+      document.getElementById("harvestDate").value;
+
+    const packing =
+      document.getElementById("packing").value;
+
+
+    if(!name || !quantity || !price) {
+
+      alert("Please enter crop name, quantity and price.");
+
+      return;
+
+    }
+
+
+    let emoji = "🌾";
+
+    if(name.toLowerCase().includes("tomato"))
+      emoji = "🍅";
+
+    else if(name.toLowerCase().includes("potato"))
+      emoji = "🥔";
+
+    else if(name.toLowerCase().includes("carrot"))
+      emoji = "🥕";
+
+    else if(name.toLowerCase().includes("apple"))
+      emoji = "🍎";
+
+    else if(name.toLowerCase().includes("rice"))
+      emoji = "🌾";
+
+
+    crops.push({
+
+      name: name,
+
+      quantity: quantity,
+
+      price: price,
+
+      farmer: "You",
+
+      emoji: emoji,
+
+      harvest: harvest,
+
+      packing: packing
+
+    });
+
+
+    document.getElementById("cropName").value = "";
+
+    document.getElementById("quantity").value = "";
+
+    document.getElementById("cropPrice").value = "";
+
+    document.getElementById("harvestDate").value = "";
+
+    document.getElementById("packing").value = "";
+
+
+    document.getElementById("cropCount").innerText =
+      crops.length;
+
+
+    alert(
+      "🌱 Crop published successfully!\n\n" +
+      name + " is now visible in the marketplace."
+    );
+
+
+    showPage("marketplace");
+
+  }
+
+
+  // Buy crop
+
+  function buyCrop(index) {
+
+    const crop = crops[index];
+
+    const quantity =
+      prompt(
+        "How many kg of " +
+        crop.name +
+        " do you want to buy?"
+      );
+
+
+    if(!quantity || quantity <= 0) {
+
+      return;
+
+    }
+
+
+    if(Number(quantity) > Number(crop.quantity)) {
+
+      alert("❌ Not enough stock available.");
+
+      return;
+
+    }
+
+
+    const total =
+      Number(quantity) * Number(crop.price);
+
+
+    alert(
+
+      "✅ ORDER CONFIRMED!\n\n" +
+
+      "Product: " + crop.name + "\n" +
+
+      "Quantity: " + quantity + " kg\n" +
+
+      "Price: ₹" + crop.price + "/kg\n" +
+
+      "Total: ₹" + total + "\n\n" +
+
+      "Farmer: " + crop.farmer + "\n\n" +
+
+      "🚚 Your order is being prepared."
+
+    );
+
+
+    crop.quantity =
+      Number(crop.quantity) - Number(quantity);
+
+
+    showPage("orders");
+
+  }
+
+  
+
+
+  // Start on home page
+
+  showPage("auth");
+
+</script>
+
+</body>
+</html>
